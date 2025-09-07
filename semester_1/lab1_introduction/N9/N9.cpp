@@ -5,11 +5,13 @@ int main()
     setlocale(LC_ALL, "Russian");
 
     int number = 0;
-    std::cout << "Введите число для проверки на то, является ли оно палиндромом: ";
-    std::cin >> number;
     int n = 3;
     int num[4];
     int a = 0;
+
+    std::cout << "Введите число для проверки на то, является ли оно палиндромом: ";
+    std::cin >> number;
+
     while (n >= 0) {
         a = number % 10;
         num[n] = a;

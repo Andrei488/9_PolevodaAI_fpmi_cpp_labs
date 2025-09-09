@@ -17,7 +17,7 @@ int main()
         number = number / 10;
     }
 
-    std::cout << sum;
+    std::cout << "Сумма всех цифр числа равна: " << sum;
 
     return 0;
 }

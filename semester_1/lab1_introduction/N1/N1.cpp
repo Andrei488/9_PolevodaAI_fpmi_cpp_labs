@@ -5,17 +5,13 @@ int main() {
 
     int a, b, d;
 
-    std::cout << "Введите число a: ";
-    std::cin >> a;
+    std::cout << "Введите числа a, b, d: ";
+    if (!(std::cin >> a >> b >> d)) {
+        std::cout << "Neverni vvod";
+        std::exit(52);
+    }
 
-    std::cout << "Введите число b: ";
-    std::cin >> b;
-
-    std::cout << "Введите число d: ";
-    std::cin >> d;
-
-    if (b > a) {
-        while (a + d <= b) {
+    while (a + d <= b) {
             if (a % 3 == 0) {
                 std::cout << a << " ";
                 a = a + d;
@@ -23,20 +19,6 @@ int main() {
             else {
                 a = a + d;
             }
-        }
-    }
-    else {
-        while (b + d <= a) {
-            if (a % 3 == 0) {
-                if (!a== 0) {
-                    std::cout << a << " ";
-                }
-                a = a + d;
-            }
-            else {
-                a = a + d;
-            }
-        }
     }
 
     return 0;

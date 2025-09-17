@@ -6,7 +6,10 @@ int main() {
     int number, temp;
 
     std::cout << "Write your number: ";
-    std::cin >> number;
+    if (!(std::cin >> number) || number == 0) {
+        std::cout << "You entered chepuha! :(\n";
+        std::exit(1);
+    }
 
     temp = number;
     while (temp > 0) {

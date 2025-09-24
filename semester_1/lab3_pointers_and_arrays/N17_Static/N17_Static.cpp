@@ -45,13 +45,6 @@ int main()
 
         std::cout << std::endl;
 
-        i = 0;
-        std::cout << "Полученный массив: { ";
-        while (i < 10) {
-            std::cout << array[i] << " ";
-            i++;
-        }
-        std::cout << "}" << std::endl << "\n";
         break;
     }
     case 1: {
@@ -68,14 +61,6 @@ int main()
 
         std::cout << std::endl;
 
-        i = 0;
-        std::cout << "Полученный массив: { ";
-        while (i < 10) {
-            std::cout << array[i] << " ";
-            i++;
-        }
-        std::cout << "}" << std::endl << "\n";
-
         break;
     }
     default: {
@@ -84,8 +69,16 @@ int main()
     }
     }
 
+    int i = 0;
+    std::cout << "Полученный массив: { ";
+    while (i < 10) {
+        std::cout << array[i] << " ";
+        i++;
+    }
+    std::cout << "}" << std::endl << "\n";
+
     int M = array[0];
-    int i = 1;
+    i = 1;
     while (i < 10) {
         if (array[i] > M) {
             M = array[i];

@@ -12,7 +12,10 @@ int main()
 
     int enter = 0;
     std::cout << "Как бы вы хотели заполнить массив? Введите '1' для заполнения вручную и '0' для рандомного заполнения: ";
-    std::cin >> enter;
+    if (!(std::cin >> enter) || !(enter == 0 || enter == 1) ) {
+        std::cout << "Введите либо 1, либо 0 \n";
+        return 1;
+    }
 
     switch (enter) {
     case 0: {
@@ -22,7 +25,10 @@ int main()
         int min = 0, max = 0;
 
         std::cout << "Введите минимальное значение и максимальное значение: ";
-        std::cin >> min >> max;
+        if (!(std::cin >> min >> max)) {
+            std::cout << "Введите числа в рамках переменной int \n";
+            return 1;
+        }
 
         if (min > max) {
             std::cout << "Ошибка: минимальное значение больше максимального!" << std::endl;
@@ -52,8 +58,11 @@ int main()
         int i = 0;
 
         while (i < 10) {
-            std::cout << "Введите " << i << " член прогрессии: ";
-            std::cin >> array[i];
+            std::cout << "Введите " << i << " член массива: ";
+            if (!(std::cin >> array[i])) {
+                std::cout << "Введите целое число \n";
+                return 1;
+            }
             i++;
         }
 
@@ -105,7 +114,10 @@ int main()
 
     int border;
     std::cout << "Введите число, числа больше которого будут отображаться в начале: ";
-    std::cin >> border;
+    if (!(std::cin >> border)) {
+        std::cout << "Введите целое число \n";
+        return 1;
+    }
 
     std::cout << "Получили преобразованный массив: { ";
     for (i = 0; i < 10; i++) {

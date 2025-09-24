@@ -141,4 +141,6 @@ int main()
         }
     }
     std::cout << "}" << std::endl;
+
+    delete[] array;
 }

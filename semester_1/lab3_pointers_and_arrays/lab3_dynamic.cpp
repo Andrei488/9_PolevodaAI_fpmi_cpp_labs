@@ -53,21 +53,13 @@ int main()
         }
 
         std::cout << std::endl;
-
-        i = 0;
-        std::cout << "Полученный массив: { ";
-        while (i < n) {
-            std::cout << array[i] << " ";
-            i++;
-        }
-        std::cout << "}" << std::endl << "\n";
         break;
     }
     case 1: {
         int i = 0;
 
         while (i < n) {
-            std::cout << "Введите " << i << " член прогрессии: ";
+            std::cout << "Введите " << i + 1 << " член прогрессии: ";
             if (!(std::cin >> array[i])) {
                 std::cout << "Введите целое число \n";
                 return 1;
@@ -76,15 +68,6 @@ int main()
         }
 
         std::cout << std::endl;
-
-        i = 0;
-        std::cout << "Полученный массив: { ";
-        while (i < n) {
-            std::cout << array[i] << " ";
-            i++;
-        }
-        std::cout << "}" << std::endl << "\n";
-
         break;
     }
     default: {
@@ -93,8 +76,16 @@ int main()
     }
     }
 
-    int max = 0, maxid = 0;
     int i = 0;
+    std::cout << "Полученный массив: { ";
+    while (i < n) {
+        std::cout << array[i] << " ";
+        i++;
+    }
+    std::cout << "}" << std::endl << "\n";
+
+    int max = 0, maxid = 0;
+    i = 0;
     while (i < (n - 2)) {
         if ((array[i] + array[i + 1] + array[i + 2]) > max) {
             max = array[i] + array[i + 1] + array[i + 2];

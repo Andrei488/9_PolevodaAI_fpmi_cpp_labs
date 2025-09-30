@@ -7,8 +7,14 @@ int main()
 {
     setlocale(LC_ALL, "Russian");
 
-    int array[10] = {0};
-    std::cout << "Default: array[10]\n";
+    int array[10000] = {0};
+
+    int n;
+    std::cout << "Введите желаемую длину массива: ";
+    if (!(std::cin >> n) || n <= 0) {
+        std::cout << "Длина массива должна быть целым, положительным числом \n";
+        return 1;
+    }
 
     int enter = 0;
     std::cout << "Как бы вы хотели заполнить массив? Введите '1' для заполнения вручную и '0' для рандомного заполнения: ";
@@ -38,7 +44,7 @@ int main()
         std::uniform_int_distribution<int> dist(min, max);
 
         int i = 0;
-        while (i < 10) {
+        while (i < n) {
             array[i] = dist(gen);
             i++;
         }
@@ -50,8 +56,8 @@ int main()
     case 1: {
         int i = 0;
 
-        while (i < 10) {
-            std::cout << "Введите " << i << " член массива: ";
+        while (i < n) {
+            std::cout << "Введите " << i + 1 << " член массива: ";
             if (!(std::cin >> array[i])) {
                 std::cout << "Введите целое число \n";
                 return 1;
@@ -71,7 +77,7 @@ int main()
 
     int i = 0;
     std::cout << "Полученный массив: { ";
-    while (i < 10) {
+    while (i < n) {
         std::cout << array[i] << " ";
         i++;
     }
@@ -79,7 +85,7 @@ int main()
 
     int M = array[0];
     i = 1;
-    while (i < 10) {
+    while (i < n) {
         if (array[i] > M) {
             M = array[i];
         }
@@ -87,7 +93,7 @@ int main()
     }
     i = 0;
     std::cout << "ID элемента с максимальным значением: ";
-    while (i < 10) {
+    while (i < n) {
         if (array[i] == M) {
             std::cout << i << " ";
         }
@@ -96,14 +102,19 @@ int main()
 
     std::cout << std::endl;
 
-    i = 1;
-    bool loop = 1;
-    for (;loop ; i++) {
-        if (i != array[0] && i != array[1] && i != array[2] && i != array[3] && i != array[4] && i != array[5] && i != array[6] && i != array[7] && i != array[8] && i != array[9]) {
-            std::cout << "Наименьшее натуральное число, отсутствующее в массиве: " << i << std::endl << "\n";
-            loop = 0;
-        }
+    i = 0;
+    int nat = 1;
+    while (i < n) {
+            if (array[i] == nat) {
+                nat++;
+                i = 0;
+            }
+            else {
+                i++;
+            }
     }
+
+    std::cout << "Наименьшее натуральное число, отсутствующее в массиве: " << nat << std::endl << "\n";
 
     int border;
     std::cout << "Введите число, числа больше которого будут отображаться в начале: ";
@@ -113,13 +124,13 @@ int main()
     }
 
     std::cout << "Получили преобразованный массив: { ";
-    for (i = 0; i < 10; i++) {
-        if (array[i] >= border) {
+    for (i = 0; i < n; i++) {
+        if (array[i] > border) {
             std::cout << array[i] << " ";
         }
     }
-    for (i = 0; i < 10; i++) {
-        if (array[i] < border) {
+    for (i = 0; i < n; i++) {
+        if (array[i] <= border) {
             std::cout << array[i] << " ";
         }
     }

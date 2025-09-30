@@ -59,7 +59,7 @@ int main()
         int i = 0;
 
         while (i < n) {
-            std::cout << "Введите " << i << " член прогрессии: ";
+            std::cout << "Введите " << i + 1 << " член прогрессии: ";
             if (!(std::cin >> array[i])) {
                 std::cout << "Введите целое число \n";
                 return 1;

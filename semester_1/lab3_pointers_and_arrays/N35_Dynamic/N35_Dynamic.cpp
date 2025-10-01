@@ -6,6 +6,16 @@
 #include <iostream>
 #include <random>
 
+void print(int a[], int n) {
+    int i = 0;
+    std::cout << "Полученный массив: { ";
+    while (i < n) {
+        std::cout << a[i] << " ";
+        i++;
+    }
+    std::cout << "}" << std::endl << "\n";
+}
+
 int main()
 {
     setlocale(LC_ALL, "Russian");
@@ -76,16 +86,10 @@ int main()
     }
     }
 
-    int i = 0;
-    std::cout << "Полученный массив: { ";
-    while (i < n) {
-        std::cout << array[i] << " ";
-        i++;
-    }
-    std::cout << "}" << std::endl << "\n";
+    print(array, n);
 
     int max = 0, maxid = 0;
-    i = 0;
+    int i = 0;
     while (i < (n-2)) {
         if ((array[i] + array[i + 1] + array[i+2]) > max) {
             max = array[i] + array[i + 1] + array[i + 2];

@@ -3,6 +3,16 @@
 #include <iostream>
 #include <random>
 
+void print(int a[], int n) {
+    int i = 0;
+    std::cout << "Полученный массив: { ";
+    while (i < n) {
+        std::cout << a[i] << " ";
+        i++;
+    }
+    std::cout << "}" << std::endl << "\n";
+}
+
 int main()
 {
     setlocale(LC_ALL, "Russian");
@@ -75,16 +85,10 @@ int main()
     }
     }
 
-    int i = 0;
-    std::cout << "Полученный массив: { ";
-    while (i < n) {
-        std::cout << array[i] << " ";
-        i++;
-    }
-    std::cout << "}" << std::endl << "\n";
+    print(array, n);
 
     int M = array[0];
-    i = 1;
+    int i = 1;
     while (i < n) {
         if (array[i] > M) {
             M = array[i];

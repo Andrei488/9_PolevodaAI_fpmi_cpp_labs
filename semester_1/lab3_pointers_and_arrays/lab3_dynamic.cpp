@@ -27,7 +27,7 @@ int main()
         return 1;
     }
 
-    int* array = new int[n];
+    int* array = new int[2 * n];
 
     int enter = 0;
     std::cout << " ак бы вы хотели заполнить массив? ¬ведите '1' дл€ заполнени€ вручную и '0' дл€ рандомного заполнени€: ";
@@ -124,18 +124,29 @@ int main()
     }
     std::cout << std::endl;
 
-    std::cout << "ѕолучили преобразованный массив: { ";
+    i = 0;
+    while (i < n) {
+        array[i + n] = array[i];
+        i++;
+    }
+
+    int l = 0;
     for (i = 0; i < n; i++) {
-        if (array[i] <= 1) {
-            std::cout << array[i] << " ";
+        if (array[i + n] <= 1) {
+            array[l] = array[i + n];
+            l++;
         }
     }
+
     for (i = 0; i < n; i++) {
-        if (array[i] > 1) {
-            std::cout << array[i] << " ";
+        if (array[i + n] > 1) {
+            array[l] = array[i + n];
+            l++;
         }
     }
-    std::cout << "}" << std::endl;
+
+    std::cout << "ѕреобразованный массив, в котором сначала вывод€тьс€ все числа не превыщающие 1: \n";
+    print(array, n);
 
     delete[] array;
 }

@@ -17,12 +17,12 @@ int main()
 {
     setlocale(LC_ALL, "Russian");
 
-    int array[10000] = {0};
+    int array[2000] = {0};
 
     int n;
     std::cout << "Введите желаемую длину массива: ";
-    if (!(std::cin >> n) || n <= 0 || n > 10000) {
-        std::cout << "Длина массива должна быть целым, положительным числом, не более 10000 \n";
+    if (!(std::cin >> n) || n <= 0 || n > 1000) {
+        std::cout << "Длина массива должна быть целым, положительным числом, не более 1000 \n";
         return 1;
     }
 
@@ -127,16 +127,26 @@ int main()
         return 1;
     }
 
-    std::cout << "Получили преобразованный массив: { ";
+    i = 0;
+    while (i < n) {
+        array[i + n] = array[i];
+        i++;
+    }
+
+    int l = 0;
     for (i = 0; i < n; i++) {
-        if (array[i] > border) {
-            std::cout << array[i] << " ";
+        if (array[i + n] > border) {
+            array[l] = array[i+n];
+            l++;
         }
     }
+
     for (i = 0; i < n; i++) {
-        if (array[i] <= border) {
-            std::cout << array[i] << " ";
+        if (array[i + n] <= border) {
+            array[l] = array[i + n];
+            l++;
         }
     }
-    std::cout << "}" << std::endl;
+
+    print(array, n);
 }

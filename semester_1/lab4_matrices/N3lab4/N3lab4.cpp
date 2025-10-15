@@ -7,8 +7,8 @@ int main()
     setlocale(LC_ALL, "Russian");
 
     int col, line;
-    std::cout << "Введите размеры векторов y и x: ";
-    if (!(std::cin >> col >> line) || col <= 0 || line <= 0) {
+    std::cout << "Введите размеры векторов x и y: ";
+    if (!(std::cin >> line >> col) || col <= 0 || line <= 0) {
         std::cout << "Введите целые положительный числа \n";
         return 1;
     }
@@ -119,6 +119,7 @@ int main()
         std::cout << "|" << std::endl;
     }
 
+    std::cout << std::endl;
     std::cout << " ";
     for (int t = 0; t < col; t++) {
         double column_sum = 0.0;

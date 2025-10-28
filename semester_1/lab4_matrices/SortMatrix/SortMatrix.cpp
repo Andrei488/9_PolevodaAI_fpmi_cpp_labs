@@ -35,12 +35,7 @@ void chooseSortMethod(int& enter) {
     }
 }
 
-void randomFilling(double** matr, int line, int col) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-
-    int min = 0, max = 0;
-
+void choosingMaxMin(int& min, int& max) {
     std::cout << "Введите минимальное значение и максимальное значение: ";
     if (!(std::cin >> min >> max)) {
         std::cout << "Введите числа в рамках переменной int \n";
@@ -51,6 +46,15 @@ void randomFilling(double** matr, int line, int col) {
         std::cout << "Ошибка: минимальное значение больше максимального!" << std::endl;
         std::exit(1);
     }
+}
+
+void randomFilling(double** matr, int line, int col) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    int min = 0, max = 0;
+
+    choosingMaxMin(min, max);
 
     std::uniform_int_distribution<int> dist(min, max);
 

@@ -2,20 +2,49 @@
 #include <random>
 #include <iomanip>
 
-int getInnerArray(int& line, int& col) {
+void cleanupAndExit(double* x = nullptr, double* y = nullptr, double** matr = nullptr, int line = 0) {
+    std::cout << "\n";
+
+    if (x) delete[] x;
+    if (y) delete[] y;
+    if (matr) {
+        for (int i = 0; i < line; i++) {
+            if (matr[i]) delete[] matr[i];
+        }
+        delete[] matr;
+    }
+
+    std::cout << "Нажмите любую клавишу для выхода...\n";
+    std::cin.get();
+    std::exit(1);
+}
+
+void getInnerArray(int& line, int& col) {
     std::cout << "Введите размеры векторов x и y: ";
     if (!(std::cin >> line >> col) || col <= 0 || line <= 0) {
         std::cout << "Введите целые положительные числа \n";
-        std::exit(1);
+        cleanupAndExit();
     }
-    return 0;
 }
 
 void chooseFillingType(int& enter) {
     std::cout << "\nКак бы вы хотели заполнить матрицу? Введите '1' для заполнения вручную и '0' для рандомного заполнения: ";
     if (!(std::cin >> enter) || !(enter == 0 || enter == 1)) {
         std::cout << "Введите либо 1, либо 0 \n";
-        std::exit(1);
+        cleanupAndExit();
+    }
+}
+
+void choosingMaxMin(int& max, int& min) {
+    std::cout << "Введите минимальное значение и максимальное значение: ";
+    if (!(std::cin >> min >> max)) {
+        std::cout << "Введите числа в рамках переменной int \n";
+        cleanupAndExit();
+    }
+
+    if (min > max) {
+        std::cout << "Ошибка: минимальное значение больше максимального" << std::endl;
+        cleanupAndExit();
     }
 }
 
@@ -25,16 +54,7 @@ void randomFilling(double* x, double* y, int line, int col) {
 
     int min = 0, max = 0;
 
-    std::cout << "Введите минимальное значение и максимальное значение: ";
-    if (!(std::cin >> min >> max)) {
-        std::cout << "Введите числа в рамках переменной int \n";
-        std::exit(1);
-    }
-
-    if (min > max) {
-        std::cout << "Ошибка: минимальное значение больше максимального!" << std::endl;
-        std::exit(1);
-    }
+    choosingMaxMin(max, min);
 
     std::uniform_int_distribution<int> dist(min, max);
 
@@ -55,7 +75,7 @@ void manualFilling(double* x, double* y, int line, int col) {
         std::cout << "Введите " << i + 1 << " член прогрессии x: ";
         if (!(std::cin >> x[i])) {
             std::cout << "Введите целое число \n";
-            std::exit(1);
+            cleanupAndExit(x, y);
         }
         i++;
     }
@@ -65,7 +85,7 @@ void manualFilling(double* x, double* y, int line, int col) {
         std::cout << "Введите " << i + 1 << " член прогрессии y: ";
         if (!(std::cin >> y[i])) {
             std::cout << "Введите целое число \n";
-            std::exit(1);
+            cleanupAndExit(x, y);
         }
         i++;
     }
@@ -73,9 +93,9 @@ void manualFilling(double* x, double* y, int line, int col) {
     std::cout << std::endl;
 }
 
-void printArray(double* x,int line,char name) {
+void printArray(double* x, int line, char name) {
     int i = 0;
-    std::cout << "Полученный массив "<< name <<": { ";
+    std::cout << "Полученный массив " << name << ": { ";
     while (i < line) {
         std::cout << x[i] << " ";
         i++;
@@ -140,7 +160,7 @@ int main()
 
     switch (enter) {
     case 0: {
-        randomFilling( x, y, line, col);
+        randomFilling(x, y, line, col);
         break;
     }
     case 1: {
@@ -149,25 +169,21 @@ int main()
     }
     default: {
         std::cout << "Ошибка ввода" << std::endl;
+        cleanupAndExit(x, y);
         break;
     }
     }
 
-    printArray( x, line, 'x');
-    printArray( y, col, 'y');
+    printArray(x, line, 'x');
+    printArray(y, col, 'y');
 
     double** matr = new double* [line];
-    createMatrix( matr, line, col);
+    createMatrix(matr, line, col);
 
     task(x, y, matr, line, col);
     printMatrix(matr, line, col);
 
     calculatingColumnSum(matr, line, col);
 
-    delete[] x;
-    delete[] y;
-    for (int i = 0; i < line; i++) {
-        delete[] matr[i];
-    }
-    delete[] matr;
+    cleanupAndExit(x, y, matr, line);
 }

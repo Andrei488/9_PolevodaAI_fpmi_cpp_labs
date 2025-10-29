@@ -48,10 +48,7 @@ void choosingMaxMin(int& max, int& min) {
     }
 }
 
-void randomFilling(double* x, double* y, int line, int col) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-
+void randomFilling(double* x, double* y, int line, int col, std::mt19937& gen) {
     int min = 0, max = 0;
 
     choosingMaxMin(max, min);
@@ -69,7 +66,6 @@ void randomFilling(double* x, double* y, int line, int col) {
 }
 
 void manualFilling(double* x, double* y, int line, int col) {
-
     int i = 0;
     while (i < line) {
         std::cout << "Введите " << i + 1 << " член прогрессии x: ";
@@ -148,6 +144,8 @@ void calculatingColumnSum(double** matr, int line, int col) {
 int main()
 {
     setlocale(LC_ALL, "Russian");
+    std::random_device rd;
+    std::mt19937 gen(rd());
 
     int col, line;
     getInnerArray(line, col);
@@ -160,7 +158,7 @@ int main()
 
     switch (enter) {
     case 0: {
-        randomFilling(x, y, line, col);
+        randomFilling(x, y, line, col, gen);
         break;
     }
     case 1: {

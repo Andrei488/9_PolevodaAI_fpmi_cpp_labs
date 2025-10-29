@@ -1,12 +1,7 @@
-﻿// solve task with usage of
-// dynamic arrays
-
-// N35
-
-#include <iostream>
+﻿#include <iostream>
 #include <random>
 
-void print(int a[], int n) {
+void print(double* a, int n) {
     int i = 0;
     std::cout << "Полученный массив: { ";
     while (i < n) {
@@ -36,15 +31,12 @@ int getInputMethod() {
     return enter;
 }
 
-bool fillArrayRandom(int array[], int n) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-
-    int min = 0, max = 0;
+bool fillArrayRandom(double* array, int n, std::mt19937& gen) {
+    double min = 0, max = 0;
 
     std::cout << "Введите минимальное значение и максимальное значение: ";
     if (!(std::cin >> min >> max)) {
-        std::cout << "Введите числа в рамках переменной int \n";
+        std::cout << "Введите числа \n";
         return false;
     }
 
@@ -53,7 +45,7 @@ bool fillArrayRandom(int array[], int n) {
         return false;
     }
 
-    std::uniform_int_distribution<int> dist(min, max);
+    std::uniform_real_distribution<double> dist(min, max);
 
     int i = 0;
     while (i < n) {
@@ -65,13 +57,13 @@ bool fillArrayRandom(int array[], int n) {
     return true;
 }
 
-bool fillArrayManual(int array[], int n) {
+bool fillArrayManual(double* array, int n) {
     int i = 0;
 
     while (i < n) {
         std::cout << "Введите " << i + 1 << " член прогрессии: ";
         if (!(std::cin >> array[i])) {
-            std::cout << "Введите целое число \n";
+            std::cout << "Введите число \n";
             return false;
         }
         i++;
@@ -81,10 +73,10 @@ bool fillArrayManual(int array[], int n) {
     return true;
 }
 
-bool fillArray(int array[], int n, int method) {
+bool fillArray(double* array, int n, int method, std::mt19937& gen) {
     switch (method) {
     case 0:
-        return fillArrayRandom(array, n);
+        return fillArrayRandom(array, n, gen);
     case 1:
         return fillArrayManual(array, n);
     default:
@@ -93,8 +85,9 @@ bool fillArray(int array[], int n, int method) {
     }
 }
 
-void findMaxTripleSum(int array[], int n) {
-    int max = 0, maxid = 0;
+void findMaxTripleSum(double* array, int n) {
+    double max = 0;
+    int maxid = 0;
     int i = 0;
     while (i < (n - 2)) {
         if ((array[i] + array[i + 1] + array[i + 2]) > max) {
@@ -106,10 +99,10 @@ void findMaxTripleSum(int array[], int n) {
     std::cout << "Сумма, наибольшей цепочки, подряд идущих чисел прогрессии, равна: " << max << ". Это сумма элементов с id: " << maxid << "(" << array[maxid] << "), " << maxid + 1 << "(" << array[maxid + 1] << "), " << maxid + 2 << "(" << array[maxid + 2] << ") \n";
 }
 
-void sumAfterLastZero(int array[], int n) {
+void sumAfterLastZero(double* array, int n) {
     bool ifsum = 0;
     int zeroid = 0;
-    int i = n;
+    int i = n - 1;
     while (i >= 0) {
         if (array[i] == 0) {
             zeroid = i;
@@ -118,10 +111,11 @@ void sumAfterLastZero(int array[], int n) {
         }
         i--;
     }
-    int sum = 0;
-    while (zeroid < n && ifsum) {
-        sum = sum + array[zeroid];
-        zeroid++;
+    double sum = 0;
+    if (ifsum) {
+        for (int j = zeroid + 1; j < n; j++) {
+            sum += array[j];
+        }
     }
     std::cout << std::endl;
     if (ifsum) {
@@ -133,25 +127,16 @@ void sumAfterLastZero(int array[], int n) {
     std::cout << std::endl;
 }
 
-void rearrangeArrayByOne(int array[], int n) {
-    int i = 0;
-    while (i < n) {
-        array[i + n] = array[i];
-        i++;
-    }
-
-    int l = 0;
-    for (i = 0; i < n; i++) {
-        if (array[i + n] <= 1) {
-            array[l] = array[i + n];
-            l++;
-        }
-    }
-
-    for (i = 0; i < n; i++) {
-        if (array[i + n] > 1) {
-            array[l] = array[i + n];
-            l++;
+void rearrangeArrayByOne(double* array, int n) {
+    for (int i = 0; i < n; i++) {
+        if (array[i] <= 1) {
+            double temp = array[i];
+            int j = i;
+            while (j > 0 && array[j - 1] > 1) {
+                array[j] = array[j - 1];
+                j--;
+            }
+            array[j] = temp;
         }
     }
 }
@@ -159,11 +144,13 @@ void rearrangeArrayByOne(int array[], int n) {
 int main()
 {
     setlocale(LC_ALL, "Russian");
+    std::random_device rd;
+    std::mt19937 gen(rd());
 
     int n = getArrayLength();
     if (n == -1) return 1;
 
-    int* array = new int[2 * n];
+    double* array = new double[n];
 
     int enter = getInputMethod();
     if (enter == -1) {
@@ -171,7 +158,7 @@ int main()
         return 1;
     }
 
-    if (!fillArray(array, n, enter)) {
+    if (!fillArray(array, n, enter, gen)) {
         delete[] array;
         return 1;
     }

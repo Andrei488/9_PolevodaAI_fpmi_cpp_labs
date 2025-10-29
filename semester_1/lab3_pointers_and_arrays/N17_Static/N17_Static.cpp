@@ -1,9 +1,7 @@
-﻿// N17_Static.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-
-#include <iostream>
+﻿#include <iostream>
 #include <random>
 
-void print(int a[], int n) {
+void print(int* a, int n) {
     int i = 0;
     std::cout << "Полученный массив: { ";
     while (i < n) {
@@ -33,12 +31,7 @@ int getInputMethod() {
     return enter;
 }
 
-bool fillArrayRandom(int array[], int n) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-
-    int min = 0, max = 0;
-
+bool findMinMax(int& min, int& max) {
     std::cout << "Введите минимальное значение и максимальное значение: ";
     if (!(std::cin >> min >> max)) {
         std::cout << "Введите числа в рамках переменной int \n";
@@ -50,25 +43,38 @@ bool fillArrayRandom(int array[], int n) {
         return false;
     }
 
+    if (min < 1) {
+        std::cout << "Ошибка: попытка сгенерировать не натуральное число" << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+bool fillArrayRandom(int* array, int n, std::mt19937& gen) {
+    int min = 0, max = 0;
+
+    if (findMinMax(min, max) == false) {
+        return false;
+    }
+
     std::uniform_int_distribution<int> dist(min, max);
 
-    int i = 0;
-    while (i < n) {
+    for (int i = 0; i < n; i++) {
         array[i] = dist(gen);
-        i++;
     }
 
     std::cout << std::endl;
     return true;
 }
 
-bool fillArrayManual(int array[], int n) {
+bool fillArrayManual(int* array, int n) {
     int i = 0;
 
     while (i < n) {
         std::cout << "Введите " << i + 1 << " член массива: ";
-        if (!(std::cin >> array[i])) {
-            std::cout << "Введите целое число \n";
+        if (!(std::cin >> array[i]) || array[i] < 1) {
+            std::cout << "Введите целое натуральное число \n";
             return false;
         }
         i++;
@@ -78,10 +84,10 @@ bool fillArrayManual(int array[], int n) {
     return true;
 }
 
-bool fillArray(int array[], int n, int method) {
+bool fillArray(int* array, int n, int method, std::mt19937& gen) {
     switch (method) {
     case 0:
-        return fillArrayRandom(array, n);
+        return fillArrayRandom(array, n, gen);
     case 1:
         return fillArrayManual(array, n);
     default:
@@ -90,7 +96,7 @@ bool fillArray(int array[], int n, int method) {
     }
 }
 
-void findMaxElements(int array[], int n) {
+void findMaxElements(int* array, int n) {
     int M = array[0];
     int i = 1;
     while (i < n) {
@@ -100,10 +106,10 @@ void findMaxElements(int array[], int n) {
         i++;
     }
     i = 0;
-    std::cout << "ID элемента с максимальным значением: ";
+    std::cout << "Номер элемента с максимальным значением: ";
     while (i < n) {
         if (array[i] == M) {
-            std::cout << i << " ";
+            std::cout << i + 1 << " ";
         }
         i++;
     }
@@ -111,7 +117,7 @@ void findMaxElements(int array[], int n) {
     std::cout << std::endl;
 }
 
-int findMissingNatural(int array[], int n) {
+int findMissingNatural(int* array, int n) {
     int i = 0;
     int nat = 1;
     while (i < n) {
@@ -136,25 +142,16 @@ int getBorder() {
     return border;
 }
 
-void rearrangeArray(int array[], int n, int border) {
-    int i = 0;
-    while (i < n) {
-        array[i + n] = array[i];
-        i++;
-    }
-
-    int l = 0;
-    for (i = 0; i < n; i++) {
-        if (array[i + n] > border) {
-            array[l] = array[i + n];
-            l++;
-        }
-    }
-
-    for (i = 0; i < n; i++) {
-        if (array[i + n] <= border) {
-            array[l] = array[i + n];
-            l++;
+void rearrangeArray(int* array, int n, int border) {
+    for (int i = 0; i < n; i++) {
+        if (array[i] > border) {
+            int temp = array[i];
+            int j = i;
+            while (j > 0 && array[j - 1] <= border) {
+                array[j] = array[j - 1];
+                j--;
+            }
+            array[j] = temp;
         }
     }
 }
@@ -162,8 +159,11 @@ void rearrangeArray(int array[], int n, int border) {
 int main()
 {
     setlocale(LC_ALL, "Russian");
+    std::random_device rd;
+    std::mt19937 gen(rd());
 
-    int array[2000] = { 0 };
+    int const maxLength = 2000;
+    int array[maxLength] = { 0 };
 
     int n = getArrayLength();
     if (n == -1) return 1;
@@ -171,7 +171,7 @@ int main()
     int enter = getInputMethod();
     if (enter == -1) return 1;
 
-    if (!fillArray(array, n, enter)) return 1;
+    if (!fillArray(array, n, enter, gen)) return 1;
 
     print(array, n);
 

@@ -26,7 +26,7 @@ std::vector<std::string> extractWords(const std::string& text) {
 
 size_t findMaxLength(const std::vector<std::string>& words) {
     size_t maxLength = 0;
-    for (const auto& word : words) {
+    for (const std::string& word : words) {
         if (word.length() > maxLength) {
             maxLength = word.length();
         }
@@ -36,7 +36,7 @@ size_t findMaxLength(const std::vector<std::string>& words) {
 
 std::vector<std::string> findLongestWords(const std::vector<std::string>& words, size_t maxLength) {
     std::vector<std::string> longestWords;
-    for (const auto& word : words) {
+    for (const std::string& word : words) {
         if (word.length() == maxLength) {
             longestWords.push_back(word);
         }

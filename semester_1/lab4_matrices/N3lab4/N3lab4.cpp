@@ -2,55 +2,33 @@
 #include <random>
 #include <iomanip>
 
-void cleanupAndExit(double* x = nullptr, double* y = nullptr, double** matr = nullptr, int line = 0) {
-    std::cout << "\n";
-
-    if (x) delete[] x;
-    if (y) delete[] y;
-    if (matr) {
-        for (int i = 0; i < line; i++) {
-            if (matr[i]) delete[] matr[i];
-        }
-        delete[] matr;
-    }
-
-    std::cout << "Нажмите любую клавишу для выхода...\n";
-    std::cin.get();
-    std::exit(1);
-}
-
 void getInnerArray(int& line, int& col) {
     std::cout << "Введите размеры векторов x и y: ";
     if (!(std::cin >> line >> col) || col <= 0 || line <= 0) {
-        std::cout << "Введите целые положительные числа \n";
-        cleanupAndExit();
+        throw "Введите целые положительные числа";
     }
 }
 
 void chooseFillingType(int& enter) {
     std::cout << "\nКак бы вы хотели заполнить матрицу? Введите '1' для заполнения вручную и '0' для рандомного заполнения: ";
     if (!(std::cin >> enter) || !(enter == 0 || enter == 1)) {
-        std::cout << "Введите либо 1, либо 0 \n";
-        cleanupAndExit();
+        throw "Введите либо 1, либо 0";
     }
 }
 
 void choosingMaxMin(int& max, int& min) {
     std::cout << "Введите минимальное значение и максимальное значение: ";
     if (!(std::cin >> min >> max)) {
-        std::cout << "Введите числа в рамках переменной int \n";
-        cleanupAndExit();
+        throw "Введите числа в рамках переменной int";
     }
 
     if (min > max) {
-        std::cout << "Ошибка: минимальное значение больше максимального" << std::endl;
-        cleanupAndExit();
+        throw "Минимальное значение больше максимального";
     }
 }
 
 void randomFilling(double* x, double* y, int line, int col, std::mt19937& gen) {
     int min = 0, max = 0;
-
     choosingMaxMin(max, min);
 
     std::uniform_int_distribution<int> dist(min, max);
@@ -61,7 +39,6 @@ void randomFilling(double* x, double* y, int line, int col, std::mt19937& gen) {
     for (int i = 0; i < col; i++) {
         y[i] = dist(gen);
     }
-
     std::cout << std::endl;
 }
 
@@ -70,8 +47,7 @@ void manualFilling(double* x, double* y, int line, int col) {
     while (i < line) {
         std::cout << "Введите " << i + 1 << " член прогрессии x: ";
         if (!(std::cin >> x[i])) {
-            std::cout << "Введите целое число \n";
-            cleanupAndExit(x, y);
+            throw "Введите целое число";
         }
         i++;
     }
@@ -80,13 +56,22 @@ void manualFilling(double* x, double* y, int line, int col) {
     while (i < col) {
         std::cout << "Введите " << i + 1 << " член прогрессии y: ";
         if (!(std::cin >> y[i])) {
-            std::cout << "Введите целое число \n";
-            cleanupAndExit(x, y);
+            throw "Введите целое число";
         }
         i++;
     }
-
     std::cout << std::endl;
+}
+
+void cleanup(double* x, double* y, double** matr, int line) {
+    if (x) delete[] x;
+    if (y) delete[] y;
+    if (matr) {
+        for (int i = 0; i < line; i++) {
+            if (matr[i]) delete[] matr[i];
+        }
+        delete[] matr;
+    }
 }
 
 void printArray(double* x, int line, char name) {
@@ -141,47 +126,55 @@ void calculatingColumnSum(double** matr, int line, int col) {
     std::cout << std::endl;
 }
 
-int main()
-{
+int main() {
     setlocale(LC_ALL, "Russian");
-    std::random_device rd;
-    std::mt19937 gen(rd());
 
-    int col, line;
-    getInnerArray(line, col);
+    double* x = nullptr;
+    double* y = nullptr;
+    double** matr = nullptr;
+    int line = 0, col = 0;
 
-    double* x = new double[line];
-    double* y = new double[col];
+    try {
+        std::random_device rd;
+        std::mt19937 gen(rd());
 
-    int enter = 0;
-    chooseFillingType(enter);
+        getInnerArray(line, col);
 
-    switch (enter) {
-    case 0: {
-        randomFilling(x, y, line, col, gen);
-        break;
+        x = new double[line];
+        y = new double[col];
+
+        int enter = 0;
+        chooseFillingType(enter);
+
+        switch (enter) {
+        case 0:
+            randomFilling(x, y, line, col, gen);
+            break;
+        case 1:
+            manualFilling(x, y, line, col);
+            break;
+        default:
+            throw "Ошибка ввода";
+        }
+
+        printArray(x, line, 'x');
+        printArray(y, col, 'y');
+
+        matr = new double* [line];
+        createMatrix(matr, line, col);
+
+        task(x, y, matr, line, col);
+        printMatrix(matr, line, col);
+        calculatingColumnSum(matr, line, col);
     }
-    case 1: {
-        manualFilling(x, y, line, col);
-        break;
+    catch (const char* errorMessage) {
+        std::cout << "ОШИБКА: " << errorMessage << std::endl;
     }
-    default: {
-        std::cout << "Ошибка ввода" << std::endl;
-        cleanupAndExit(x, y);
-        break;
-    }
+    catch (...) {
+        std::cout << "Неизвестная ошибка!" << std::endl;
     }
 
-    printArray(x, line, 'x');
-    printArray(y, col, 'y');
+    cleanup(x, y, matr, line);
 
-    double** matr = new double* [line];
-    createMatrix(matr, line, col);
-
-    task(x, y, matr, line, col);
-    printMatrix(matr, line, col);
-
-    calculatingColumnSum(matr, line, col);
-
-    cleanupAndExit(x, y, matr, line);
+    return 0;
 }

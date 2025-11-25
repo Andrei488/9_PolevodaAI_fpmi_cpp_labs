@@ -43,7 +43,6 @@ build_asan
 
 # Build results
 
-side quests/
 [Dd]ebug/
 [Rr]elease/
 x64/

@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <algorithm>
 
 int findGcd(int a, int b) {
     while (b != 0) {
@@ -219,12 +220,35 @@ struct Fraction {
     }
 };
 
+bool compareFractionsUp(const Fraction& a, const Fraction& b) {
+    return a.num_ * b.del_ < b.num_ * a.del_;
+}
+
+bool compareFractionsDown(const Fraction& a, const Fraction& b) {
+    return a.num_ * b.del_ > b.num_ * a.del_;
+}
+
+void outputArray(Fraction* array, int size) {
+    for (int i = 0; i < size; i++) {
+        std::cout << array[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
 int main()
 {
+    setlocale(LC_ALL, "Russian");
+
     Fraction f(5, 3);
     Fraction f1(4, 3);
 
-    if (f > f1) {
-        std::cout << 1;
-    }
+    int size = 3;
+    Fraction array[] = { Fraction(1, 2), Fraction(3, 4), Fraction(2, 5) };
+    outputArray(array, size);
+    std::sort(array, array + size, compareFractionsUp);
+    std::cout << "Отсортировано по возрастанию: ";
+    outputArray(array, size);
+    std::sort(array, array + size, compareFractionsDown);
+    std::cout << "Отсортировано по убыванию: ";
+    outputArray(array, size);
 }

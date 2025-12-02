@@ -1,140 +1,101 @@
+#include "gtest.h"
 #include "number_processor.h"
-#include <iostream>
-#include <cassert>
 
-void TestIsValidInput() {
-    std::cout << "TestIsValidInput... ";
-
-    assert(isValidInput(1) == true);
-    assert(isValidInput(100) == true);
-    assert(isValidInput(12345) == true);
-    assert(isValidInput(999999999) == true);
-    assert(isValidInput(0) == false);
-    assert(isValidInput(-1) == false);
-    assert(isValidInput(-100) == false);
-    assert(isValidInput(-12345) == false);
-
-    std::cout << "PASSED\n";
+TEST(InputValidationTest, ValidPositiveNumbers) {
+    EXPECT_TRUE(isValidInput(1));
+    EXPECT_TRUE(isValidInput(100));
+    EXPECT_TRUE(isValidInput(12345));
+    EXPECT_TRUE(isValidInput(999999999));
 }
 
-void TestCountDigits() {
-    std::cout << "TestCountDigits... ";
+TEST(InputValidationTest, InvalidNonPositiveNumbers) {
+    EXPECT_FALSE(isValidInput(0));
+    EXPECT_FALSE(isValidInput(-1));
+    EXPECT_FALSE(isValidInput(-100));
+    EXPECT_FALSE(isValidInput(-12345));
+}
 
+TEST(DigitCountingTest, CountUniqueDigits) {
     int digits[10] = { 0 };
-
     countDigits(123, digits);
-    assert(digits[0] == 0);
-    assert(digits[1] == 1);
-    assert(digits[2] == 1);
-    assert(digits[3] == 1);
+    EXPECT_EQ(digits[0], 0);
+    EXPECT_EQ(digits[1], 1);
+    EXPECT_EQ(digits[2], 1);
+    EXPECT_EQ(digits[3], 1);
+}
 
-    for (int i = 0; i < 10; i++) digits[i] = 0;
+TEST(DigitCountingTest, CountRepeatedDigits) {
+    int digits[10] = { 0 };
     countDigits(112233, digits);
-    assert(digits[1] == 2);
-    assert(digits[2] == 2);
-    assert(digits[3] == 2);
+    EXPECT_EQ(digits[1], 2);
+    EXPECT_EQ(digits[2], 2);
+    EXPECT_EQ(digits[3], 2);
+}
 
-    for (int i = 0; i < 10; i++) digits[i] = 0;
+TEST(DigitCountingTest, CountTripleDigits) {
+    int digits[10] = { 0 };
     countDigits(111222, digits);
-    assert(digits[1] == 3);
-    assert(digits[2] == 3);
+    EXPECT_EQ(digits[1], 3);
+    EXPECT_EQ(digits[2], 3);
+}
 
-    for (int i = 0; i < 10; i++) digits[i] = 0;
+TEST(DigitCountingTest, CountWithZeros) {
+    int digits[10] = { 0 };
     countDigits(100, digits);
-    assert(digits[0] == 2);
-    assert(digits[1] == 1);
+    EXPECT_EQ(digits[0], 2);
+    EXPECT_EQ(digits[1], 1);
+}
 
-    for (int i = 0; i < 10; i++) digits[i] = 0;
+TEST(DigitCountingTest, CountSameDigits) {
+    int digits[10] = { 0 };
     countDigits(999, digits);
-    assert(digits[9] == 3);
-
-    std::cout << "PASSED\n";
+    EXPECT_EQ(digits[9], 3);
 }
 
-void TestSingleDigitNumbers() {
-    std::cout << "TestSingleDigitNumbers... ";
-
-    assert(processNumber(1) == 1);
-    assert(processNumber(5) == 5);
-    assert(processNumber(9) == 9);
-    assert(processNumber(0) == 0);
-
-    std::cout << "PASSED\n";
+TEST(NumberProcessingTest, SingleDigitNumbers) {
+    EXPECT_EQ(processNumber(1), 1);
+    EXPECT_EQ(processNumber(5), 5);
+    EXPECT_EQ(processNumber(9), 9);
+    EXPECT_EQ(processNumber(0), 0);
 }
 
-void TestAllDigitsOddCount() {
-    std::cout << "TestAllDigitsOddCount... ";
-
-    assert(processNumber(123) == 123);
-    assert(processNumber(13579) == 13579);
-    assert(processNumber(111) == 111);
-    assert(processNumber(33333) == 33333);
-    assert(processNumber(111222333) == 111222333);
-
-    std::cout << "PASSED\n";
+TEST(NumberProcessingTest, AllDigitsOddCount) {
+    EXPECT_EQ(processNumber(123), 123);
+    EXPECT_EQ(processNumber(13579), 13579);
+    EXPECT_EQ(processNumber(111), 111);
+    EXPECT_EQ(processNumber(33333), 33333);
+    EXPECT_EQ(processNumber(111222333), 111222333);
 }
 
-void TestAllDigitsEvenCount() {
-    std::cout << "TestAllDigitsEvenCount... ";
-
-    assert(processNumber(11) == 0);
-    assert(processNumber(1122) == 0);
-    assert(processNumber(112233) == 0);
-    assert(processNumber(123321) == 0);
-    assert(processNumber(1221) == 0);
-    assert(processNumber(1122334455) == 0);
-
-    std::cout << "PASSED\n";
+TEST(NumberProcessingTest, AllDigitsEvenCount) {
+    EXPECT_EQ(processNumber(11), 0);
+    EXPECT_EQ(processNumber(1122), 0);
+    EXPECT_EQ(processNumber(112233), 0);
+    EXPECT_EQ(processNumber(123321), 0);
+    EXPECT_EQ(processNumber(1221), 0);
+    EXPECT_EQ(processNumber(1122334455), 0);
 }
 
-void TestOrderPreservation() {
-    std::cout << "TestOrderPreservation... ";
-
-    assert(processNumber(312) == 312);
-    assert(processNumber(21133) == 2);
-    assert(processNumber(1321) == 32);
-    assert(processNumber(12341) == 234);
-    assert(processNumber(551122) == 0);
-    assert(processNumber(51212) == 5);
-
-    std::cout << "PASSED\n";
+TEST(NumberProcessingTest, OrderPreservation) {
+    EXPECT_EQ(processNumber(312), 312);
+    EXPECT_EQ(processNumber(21133), 2);
+    EXPECT_EQ(processNumber(1321), 32);
+    EXPECT_EQ(processNumber(12341), 234);
+    EXPECT_EQ(processNumber(551122), 0);
+    EXPECT_EQ(processNumber(51212), 5);
 }
 
-void TestRepeatedDigits() {
-    std::cout << "TestRepeatedDigits... ";
-
-    assert(processNumber(111) == 111);
-    assert(processNumber(1111) == 0);
-    assert(processNumber(11111) == 11111);
-    assert(processNumber(222222) == 0);
-    assert(processNumber(3333333) == 3333333);
-
-    std::cout << "PASSED\n";
+TEST(NumberProcessingTest, RepeatedDigits) {
+    EXPECT_EQ(processNumber(111), 111);
+    EXPECT_EQ(processNumber(1111), 0);
+    EXPECT_EQ(processNumber(11111), 11111);
+    EXPECT_EQ(processNumber(222222), 0);
+    EXPECT_EQ(processNumber(3333333), 3333333);
 }
 
-void TestLargeNumbers() {
-    std::cout << "TestLargeNumbers... ";
-
-    assert(processNumber(123456789) == 123456789);
-    assert(processNumber(987654321) == 987654321);
-    assert(processNumber(112233445566778899) == 0);
-    assert(processNumber(135792468) == 135792468);
-
-    std::cout << "PASSED\n";
-}
-
-int main() {
-    std::cout << "=== STARTING COMPREHENSIVE UNIT TESTS ===\n\n";
-
-    TestIsValidInput();
-    TestCountDigits();
-    TestSingleDigitNumbers();
-    TestAllDigitsOddCount();
-    TestAllDigitsEvenCount();
-    TestOrderPreservation();
-    TestRepeatedDigits();
-    TestLargeNumbers();
-
-    std::cout << "\n=== ALL TESTS PASSED ===\n";
-    return 0;
+TEST(NumberProcessingTest, LargeNumbers) {
+    EXPECT_EQ(processNumber(123456789), 123456789);
+    EXPECT_EQ(processNumber(987654321), 987654321);
+    EXPECT_EQ(processNumber(112233445566778899), 0);
+    EXPECT_EQ(processNumber(135792468), 135792468);
 }

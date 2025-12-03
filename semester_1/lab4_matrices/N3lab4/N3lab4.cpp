@@ -169,9 +169,11 @@ int main() {
     }
     catch (const char* errorMessage) {
         std::cout << "ОШИБКА: " << errorMessage << std::endl;
+        cleanup(x, y, matr, line);
     }
     catch (...) {
         std::cout << "Неизвестная ошибка!" << std::endl;
+        cleanup(x, y, matr, line);
     }
 
     cleanup(x, y, matr, line);

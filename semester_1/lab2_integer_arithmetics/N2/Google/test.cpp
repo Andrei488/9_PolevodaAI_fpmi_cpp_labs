@@ -1,6 +1,6 @@
-#include "pch.h"
 #include "gtest/gtest.h"
-#include "number_processor.h"
+#include "pch.cpp"
+#include "pch.h"
 
 //cl /EHsc test.cpp pch.cpp && test.exe
 

@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "pch.h"
+#include "number_processor.h"
 
 //cl /EHsc test.cpp pch.cpp && test.exe
 

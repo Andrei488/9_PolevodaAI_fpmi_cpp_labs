@@ -1,5 +1,4 @@
 #include "gtest/gtest.h"
-#include "pch.cpp"
 #include "pch.h"
 
 //cl /EHsc test.cpp pch.cpp && test.exe

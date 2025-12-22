@@ -1,20 +1,18 @@
-﻿// lab6 N2
-
-#include <iostream>
+﻿#include <iostream>
 #include <string>
 #include <vector>
 #include <fstream>
-#include <iostream>
+#include <stdexcept>
 
 std::vector<std::string> read(std::ifstream& in) {
     std::vector<std::string> lines;
     std::string line;
 
     if (!in.is_open()) {
-        throw "Файл не открылся";
-    } 
+        throw std::runtime_error("Файл не открылся");
+    }
     if (in.peek() == std::ifstream::traits_type::eof()) {
-        throw "Файл пустой";
+        throw std::runtime_error("Файл пустой");
     }
 
     while (getline(in, line)) {
@@ -22,7 +20,7 @@ std::vector<std::string> read(std::ifstream& in) {
     }
 
     if (lines.empty()) {
-        throw "Не удалось считать текст с файла";
+        throw std::runtime_error("Не удалось считать текст с файла");
     }
 
     return lines;
@@ -36,7 +34,7 @@ std::string getWord(std::vector<std::string>& lines) {
         word = word.substr(start);
     }
 
-    size_t end = word.find_last_not_of(' ');
+    size_t end = word.find_last_not_of(" ");
     if (end != std::string::npos) {
         word = word.substr(0, end + 1);
     }
@@ -44,7 +42,7 @@ std::string getWord(std::vector<std::string>& lines) {
     return word;
 }
 
-std::vector<std::string> extractWords(std::vector<std::string> lines) {
+std::vector<std::string> extractWords(const std::vector<std::string>& lines) {
     std::vector<std::string> words;
 
     for (size_t i = 1; i < lines.size(); i++) {
@@ -68,14 +66,14 @@ std::vector<std::string> extractWords(std::vector<std::string> lines) {
     return words;
 }
 
-size_t calculatingNumOfWordInText(size_t& quantity, std::string word, std::vector<std::string> words) {
-    quantity = 0;
-    for (int i = 0; i < words.size(); i++) {
+size_t calculatingNumOfWordInText(const std::string& word, const std::vector<std::string>& words) {
+    size_t quantity = 0;
+    for (size_t i = 0; i < words.size(); i++) {
         if (word == words[i]) {
             quantity++;
         }
     }
-    
+
     return quantity;
 }
 
@@ -88,20 +86,22 @@ int main()
 
     try {
         std::ifstream in(input_file);
-
         std::vector<std::string> lines = read(in);
+        in.close();
 
         std::string word = getWord(lines);
         std::vector<std::string> words = extractWords(lines);
-        size_t quantity = calculatingNumOfWordInText(quantity, word, words);
+        size_t quantity = calculatingNumOfWordInText(word, words);
 
         std::ofstream out(output_file);
-
         out << "Слово из первой строчки встретилось в тексте " << quantity << " раз.";
+        out.close();
     }
-    catch (std::string msg) {
-        std::cout << msg;
+    catch (const std::exception& e) {
+        std::cout << e.what();
+        return 1;
     }
 
     std::cout << "Программа завершена успешно, результат находится в файле output.txt\n";
+    return 0;
 }

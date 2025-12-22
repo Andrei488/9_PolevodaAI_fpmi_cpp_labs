@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <random>
 #include <iomanip>
+#include <cmath>
 
 void getInnerArray(int& line, int& col) {
     std::cout << "Введите размеры векторов x и y: ";
@@ -97,7 +98,7 @@ void task(double* x, double* y, double** matr, int line, int col) {
                 matr[i][t] = 1.0 / (x[i] + y[t]);
             }
             else {
-                matr[i][t] = 0;
+                matr[i][t] = INFINITY;
             }
         }
     }
@@ -107,7 +108,12 @@ void printMatrix(double** matr, int line, int col) {
     for (int i = 0; i < line; i++) {
         std::cout << "|";
         for (int t = 0; t < col; t++) {
-            std::cout << std::setw(10) << matr[i][t] << " ";
+            if (std::isinf(matr[i][t])) {
+                std::cout << std::setw(10) << "inf" << " ";
+            }
+            else {
+                std::cout << std::setw(10) << matr[i][t] << " ";
+            }
         }
         std::cout << "|" << std::endl;
     }
@@ -119,9 +125,20 @@ void calculatingColumnSum(double** matr, int line, int col) {
     for (int t = 0; t < col; t++) {
         double column_sum = 0.0;
         for (int i = 0; i < line; i++) {
-            column_sum += matr[i][t];
+            if (!std::isinf(matr[i][t])) {
+                column_sum += matr[i][t];
+            }
+            else {
+                column_sum = INFINITY;
+                break;
+            }
         }
-        std::cout << std::setw(10) << column_sum << " ";
+        if (std::isinf(column_sum)) {
+            std::cout << std::setw(10) << "inf" << " ";
+        }
+        else {
+            std::cout << std::setw(10) << column_sum << " ";
+        }
     }
     std::cout << std::endl;
 }
@@ -161,7 +178,9 @@ int main() {
         printArray(y, col, 'y');
 
         matr = new double* [line];
-        createMatrix(matr, line, col);
+        for (int i = 0; i < line; i++) {
+            matr[i] = new double[col];
+        }
 
         task(x, y, matr, line, col);
         printMatrix(matr, line, col);

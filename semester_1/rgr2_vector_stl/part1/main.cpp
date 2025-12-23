@@ -85,12 +85,8 @@ std::vector<int> countNumbersGreaterThan(std::vector<int> vector) {
         throw std::runtime_error("Некорректный ввод значения n");
     }
 
-    int count = 0;
-    for (int num : vector) {
-        if (num > n) {
-            count++;
-        }
-    }
+    int count = std::count_if(vector.begin(), vector.end(),
+        [n](int num) { return num > n; });
 
     std::cout << "Количество чисел больше " << n << ": " << count << "\n";
 

@@ -70,6 +70,33 @@ void printVector(std::vector<int> vector) {
     std::cout << "}";
 }
 
+std::vector<int> countNumbersGreaterThan(std::vector<int> vector) {
+    std::cout << "\nПодсчет чисел больше заданного значения. Текущий вектор: ";
+    printVector(vector);
+    std::cout << std::endl;
+
+    if (vector.empty()) {
+        throw std::runtime_error("Вектор пуст, операция невозможна.");
+    }
+
+    std::cout << "Введите значение n для сравнения: ";
+    int n;
+    if (!(std::cin >> n)) {
+        throw std::runtime_error("Некорректный ввод значения n");
+    }
+
+    int count = 0;
+    for (int num : vector) {
+        if (num > n) {
+            count++;
+        }
+    }
+
+    std::cout << "Количество чисел больше " << n << ": " << count << "\n";
+
+    return vector;
+}
+
 std::vector<int> replaceZeros(std::vector<int>& vector) {
     std::cout << "\nЗаменяем нули средним арифметическим. Текущий вектор: ";
     printVector(vector);
@@ -216,6 +243,7 @@ int main() {
         std::vector<int> vector = inputVector();
         int searchNumber = getSearchNumber();
         writeLog(vector, searchNumber);
+        vector = countNumbersGreaterThan(vector);
         vector = replaceZeros(vector);
         vector = addIntervalSumToAll(vector);
         vector = replaceEvenAbsoluteValues(vector);
